@@ -62,3 +62,57 @@ parts %>%
   filter(is.na(n) )
 
 #nine
+parts %>%
+  count(part_cat_id) %>%
+  right_join(part_categories, by = c("part_cat_id" = "id")) %>%
+  # Use replace_na to replace missing values in the n column
+  replace_na(list(n=0))
+
+#ten
+themes %>% 
+  # Inner join the themes table
+  inner_join(themes, by = c("id" = "parent_id"), suffix = c("_parent", "_child")) %>% 
+  # Filter for the "Harry Potter" parent name 
+  filter(name_parent == "Harry Potter")
+
+#eleven
+
+# Join themes to itself again to find the grandchild relationships
+themes %>% 
+  inner_join(themes, by = c("id" = "parent_id"), suffix = c("_parent", "_child")) %>%
+  inner_join(themes, by = c("id_child"= "parent_id"), suffix = c("_parent", "_grandchild"))
+
+#twelwe
+
+# Start with inventory_parts_joined table
+inventory_parts_joined %>%
+  # Combine with the sets table 
+  inner_join(sets, by = "set_num") %>%
+  # Combine with the themes table
+  inner_join(themes, by = c("theme_id" = "id"), suffix = c("_set", "_theme"))
+
+#thirteen
+# Count the part number and color id, weight by quantity
+batman %>%
+  count(part_num, color_id, wt = quantity)
+star_wars %>%
+  count(part_num, color_id, wt = quantity)
+
+#fourteen
+
+batman_parts %>%
+  # Combine the star_wars_parts table 
+  full_join(star_wars_parts, by = c("part_num", "color_id"), suffix = c("_batman", "_star_wars")) %>%
+  # Replace NAs with 0s in the n_batman and n_star_wars columns 
+  replace_na(list(n_batman = 0, n_star_wars = 0))
+
+#fifteen
+parts_joined %>%
+  # Sort the number of star wars pieces in descending order 
+  arrange(desc(n_star_wars)) %>%
+  # Join the colors table to the parts_joined table
+  inner_join(colors, by = c("color_id" = "id")) %>%
+  # Join the parts table to the previous join 
+  inner_join(parts, by = "part_num", suffix = c("_color", "_part") )
+
+#sixteen
