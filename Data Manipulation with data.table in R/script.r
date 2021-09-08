@@ -74,3 +74,60 @@ two_stations <- batrips[start_station %chin% c("San Francisco City Hall", "Embar
 two_stations
 
 #15
+# Select bike_id and trip_id using a character vector
+df_way <- batrips[, c("bike_id", "trip_id")]
+df_way
+
+#16
+# Select start_station and end_station cols without a character vector
+dt_way <- batrips[, .(start_station, end_station)]
+dt_way
+
+#17
+# Deselect start_terminal and end_terminal columns
+drop_terminal_cols <- batrips[, -c("start_terminal", "end_terminal")]
+drop_terminal_cols
+
+#18
+# Calculate median duration using the j argument
+median_duration <- batrips[, median(duration)]
+median_duration
+
+#19
+# Get median duration after filtering
+median_duration_filter <- batrips[end_station == "Market at 10th" & subscription_type == "Subscriber", median(duration)]
+median_duration_filter
+
+#20
+# Compute duration of all trips
+trip_duration <- batrips[, difftime(end_date,start_date, units = "min")]
+head(trip_duration)
+
+#21
+# Calculate the average duration as mean_durn
+mean_duration <- batrips[, .(mean_durn = mean(duration))]
+mean_duration
+
+#22
+# Get the min and max duration values
+min_max_duration <- batrips[, .(min(duration), max(duration))]
+min_max_duration
+
+#23
+# Calculate the average duration and the date of the last ride
+other_stats <- batrips[, .(mean_duration = mean(duration), 
+                           last_ride = max(end_date))]
+other_stats
+
+#24
+duration_stats <- batrips[start_station == "Townsend at 7th" & duration < 500, 
+                          .(min_dur = min(duration), 
+                            max_dur = max(duration))]
+duration_stats
+
+#25
+# Plot the histogram of duration based on conditions
+batrips[start_station == "Townsend at 7th" & duration < 500, hist(duration)]
+
+#26
+
