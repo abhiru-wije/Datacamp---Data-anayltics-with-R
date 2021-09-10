@@ -291,3 +291,90 @@ only_metadata <- fread("sample.csv", skip = 7)
 only_metadata
 
 #55
+# Import the file using fread 
+fread_import <- fread("sample.csv")
+
+# Import the file using read.csv 
+base_import <- read.csv("sample.csv")
+
+# Check the class of id column
+class(fread_import$id)
+class(base_import$id)
+
+#56
+# Import using read.csv with defaults
+base_r_defaults <- read.csv("sample.csv")
+str(base_r_defaults)
+
+#57
+# Import using read.csv
+base_r <- read.csv("sample.csv", 
+                   colClasses = c(rep("factor", 4), 
+                                  "character", "integer", 
+                                  rep("numeric",4)))
+str(base_r)
+
+#58
+# Import using fread
+import_fread <- fread("sample.csv", 
+                      colClasses = list(factor = 1:4, numeric = 7:10))
+str(import_fread)
+
+#59
+# Import the file and note the warning message
+incorrect <- fread("sample.csv")
+incorrect
+
+#60
+# Import the file correctly
+correct <- fread("sample.csv", fill = TRUE)
+correct
+
+#61
+# Import the file using na.strings
+missing_values <- fread("sample.csv", na.strings = "##")
+missing_values
+
+#62
+# Write dt to fwrite.txt
+fwrite(dt, "fwrite.txt")
+
+# Import the file using readLines()
+readLines("fwrite.txt")
+
+# Import the file using fread()
+fread("fwrite.txt")
+
+#63
+# Write batrips_dates to file using "ISO" format
+fwrite(batrips_dates, "iso.txt", dateTimeAs = "ISO")
+
+# Import the file back
+iso <- fread("iso.txt")
+iso
+
+#64
+# Write batrips_dates to file using "squash" format
+fwrite(batrips_dates, "squash.txt", dateTimeAs = "squash")
+
+# Import the file back
+squash <- fread("squash.txt")
+squash
+
+#65
+# Write batrips_dates to file using "epoch" format
+fwrite(batrips_dates, "epoch.txt", dateTimeAs = "epoch")
+
+# Import the file back
+epoch <- fread("epoch.txt")
+epoch
+
+#66
+# Use write.table() to write batrips
+system.time(write.table(batrips, "base-r.txt"))
+
+#67
+# Use fwrite() to write batrips
+system.time(fwrite(batrips, "data-table.txt"))
+
+#68
