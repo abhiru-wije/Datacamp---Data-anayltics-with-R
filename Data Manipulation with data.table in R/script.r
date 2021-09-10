@@ -185,3 +185,109 @@ first_last
 
 #35
 
+relevant_cols <- c("start_station", "end_station", 
+                   "start_date", "end_date", "duration")
+
+# Find the row corresponding to the shortest trip per month
+shortest <- batrips[, .SD[which.min(duration)], 
+                    by = month(start_date), 
+                    .SDcols = c("start_station", "end_station","start_date", "end_date","duration")]
+shortest
+
+#36
+# Find the total number of unique start stations and zip codes per month
+unique_station_month <- batrips[, lapply(.SD, uniqueN), 
+                                by = month(start_date), 
+                                .SDcols = c("start_station", "zip_code")]
+unique_station_month
+
+#37
+# Add a new column, duration_hour
+batrips[, duration_hour := duration/3600]
+
+#38
+# Fix spelling in the second row of start_station using the LHS := RHS form
+untidy[2, start_station := "San Francisco City Hall"]
+
+#39
+# Add new column for every start_station and end_station
+batrips[, duration_mean := mean(duration), by = .(start_station, end_station)]
+
+#40
+# Calculate the mean duration for each month
+batrips_new[, mean_dur := mean(duration, na.rm = TRUE), 
+            by = month(start_date)]
+
+#41
+# Replace NA values in duration with the mean value of duration for that month
+batrips_new[, mean_dur := mean(duration, na.rm = TRUE), 
+            by = month(start_date)][is.na(duration), 
+                                    duration := mean_dur]
+
+#42
+# Delete the mean_dur column by reference
+batrips_new[, mean_dur := mean(duration, na.rm = TRUE), 
+            by = month(start_date)][is.na(duration), 
+                                    duration := mean_dur][, mean_dur := NULL]
+
+#43
+# Add columns using the LHS := RHS form
+batrips[, c("mean_duration", "median_duration") := list(mean(duration), median(duration)), 
+        by = start_station]
+
+#44
+# Add columns using the functional form
+batrips[, `:=`(mean_duration = mean(duration),
+               median_duration = median(duration)), 
+        by = start_station]
+
+#45
+# Add the mean_duration column
+batrips[duration > 600, mean_duration := mean(duration), by = .(start_station, end_station)]
+
+#46
+# Use read.csv() to import batrips
+system.time(read.csv("batrips.csv"))
+
+#47
+# Use fread() to import batrips
+system.time(fread("batrips.csv"))
+
+#48
+# Import using read.csv()
+csv_file <- read.csv("sample.csv", fill = NA, quote = "", 
+                     stringsAsFactors = FALSE, strip.white = TRUE, 
+                     header = TRUE)
+csv_file
+
+#49
+# Import using fread()
+csv_file <- fread("sample.csv")
+csv_file
+
+#50
+# Select "id" and "val" columns
+select_columns <- fread("sample.csv", select = c("id", "val"))
+select_columns
+
+#51
+# Drop the "val" column
+drop_column <- fread(url, drop = "val")
+drop_column
+
+#52
+# Import the file
+entire_file <- fread("sample.csv")
+entire_file
+
+#53
+# Import the file while avoiding the warning
+only_data <- fread("sample.csv", nrows = 3)
+only_data
+
+#54
+# Import only the metadata
+only_metadata <- fread("sample.csv", skip = 7)
+only_metadata
+
+#55
