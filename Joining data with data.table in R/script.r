@@ -111,3 +111,10 @@ continents[life_exp, on = .(country), .N,
 # What countries are listed in multiple continents?
 continents[life_exp, on = .(country), .N, 
            by = .EACHI][N > 1]
+
+#21
+# Calculate average life expectancy per continent:
+avg_life_expectancy <- continents[life_exp, on = .(country), 
+                                  nomatch = 0][, j = mean(years), 
+                                               by = .(continent)]
+avg_life_expectancy
