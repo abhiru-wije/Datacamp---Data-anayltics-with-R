@@ -118,3 +118,38 @@ avg_life_expectancy <- continents[life_exp, on = .(country),
                                   nomatch = 0][, j = mean(years), 
                                                by = .(continent)]
 avg_life_expectancy
+
+#22
+# Full join
+merge(guardians, students, by.x = "name", by.y = "name", all = TRUE)
+
+#23
+# Left join
+merge(students, guardians, by.x = "name",by.y = "name", all.x = TRUE)
+
+#24
+# Inner join
+students[guardians, on = .(name), nomatch = 0]
+
+#25
+# What are the correct join key columns?
+students[guardians, on = .(guardian = name), nomatch = 0]
+
+#26
+# Right join
+subjects[locations, on = c("subject", "semester")]
+
+#27
+# Structure 
+str(subjects)
+str(locations)
+
+# Does semester have the same class? 
+same_class <- FALSE
+
+#28
+# Fix the column class
+locations[, semester := as.integer(semester)]
+
+# Right join
+subjects[locations, on = .(subject, semester)]
