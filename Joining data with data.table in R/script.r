@@ -153,3 +153,35 @@ locations[, semester := as.integer(semester)]
 
 # Right join
 subjects[locations, on = .(subject, semester)]
+
+#29
+# Identify and set the keys
+join_key <- c("topic" = "subject")
+
+# Right join
+teachers[locations, on = join_key]
+
+#30
+# Inner join
+capital_pop <- merge(capitals, population, on = .(city))
+
+# Left join
+merge(area, capital_pop, on = .(state = state), all.x = TRUE)
+
+
+#31
+# Inner join from step 1
+capital_pop <- merge(capitals, population, by = "city")
+
+# Left join with suffixes
+merge(capital_pop, area, by = "state", all.x = TRUE, suffixes = c(".pop",".area"))
+
+#32
+# Convert netflix to a data.table
+netflix_dt <- as.data.table(netflix, keep.rownames = "series")
+
+# Right join
+imdb[netflix_dt, on = .(title = series)]
+
+#33
+
