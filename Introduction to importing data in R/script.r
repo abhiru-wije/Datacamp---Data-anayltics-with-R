@@ -62,3 +62,23 @@ hotdogs2 <- read.delim("hotdogs.txt", header = FALSE,
 str(hotdogs2)
 
 #7
+# Load the readr package
+library(readr)
+
+# Import potatoes.csv with read_csv(): potatoes
+potatoes <- read.csv("potatoes.csv")
+
+#8
+# readr is already loaded
+
+# Column names
+properties <- c("area", "temp", "size", "storage", "method",
+                "texture", "flavor", "moistness")
+
+# Import potatoes.txt: potatoes
+potatoes <- read_tsv("potatoes.txt", col_names = properties)
+
+# Call head() on potatoes
+head(potatoes)
+
+#9
