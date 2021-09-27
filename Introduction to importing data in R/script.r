@@ -140,3 +140,22 @@ summary(hotdogs)
 summary(hotdogs_factor)
 
 #13
+# load the data.table package using library()
+library("data.table")
+
+# Import potatoes.csv with fread(): potatoes
+potatoes <- fread("potatoes.csv")
+
+# Print out potatoes
+potatoes
+
+#14
+# fread is already loaded
+
+# Import columns 6 and 8 of potatoes.csv: potatoes
+potatoes <- fread("potatoes.csv", select = c(6,8))
+
+# Plot texture (x) and moistness (y) of potatoes
+plot(x = potatoes$texture, y = potatoes$moistness)
+
+#15
